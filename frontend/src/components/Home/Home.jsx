@@ -1,83 +1,58 @@
-// frontend/src/components/Home/Home.jsx
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { TypeAnimation } from 'react-type-animation';
-import { ArrowRight, Download, Mail, Github, Linkedin, Twitter, Code, Server, Cpu, Database } from 'lucide-react';
+import { FiArrowRight, FiDownload, FiMail } from 'react-icons/fi';
 
 const Home = () => {
-  useEffect(() => {
-    // Add floating particles effect
-    const createParticle = () => {
-      const particle = document.createElement('div');
-      particle.className = 'absolute w-1 h-1 bg-primary-500/20 rounded-full animate-float-slow';
-      particle.style.left = `${Math.random() * 100}%`;
-      particle.style.top = `${Math.random() * 100}%`;
-      particle.style.animationDelay = `${Math.random() * 5}s`;
-      document.querySelector('.particles-container')?.appendChild(particle);
-    };
+  const [secretClickCount, setSecretClickCount] = useState(0);
 
-    for (let i = 0; i < 20; i++) {
-      createParticle();
+  const handleSecretClick = () => {
+    const newCount = secretClickCount + 1;
+    setSecretClickCount(newCount);
+    
+    // After 5 clicks, redirect to admin
+    if (newCount >= 5) {
+      window.location.href = '/admin/login';
+      setSecretClickCount(0);
     }
-  }, []);
-
-  const handleViewProjects = () => {
-    document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
+    
+    // Reset after 2 seconds
+    setTimeout(() => setSecretClickCount(0), 2000);
   };
-
-  const handleDownloadCV = () => {
-    const link = document.createElement('a');
-    link.href = '/resume.pdf';
-    link.download = 'NestTech_Resume.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  const handleContact = () => {
-    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const socialLinks = [
-    { icon: Github, href: 'https://github.com/nesttech', label: 'GitHub' },
-    { icon: Linkedin, href: 'https://linkedin.com/in/nesttech', label: 'LinkedIn' },
-    { icon: Twitter, href: 'https://twitter.com/nesttechdev', label: 'Twitter' },
-  ];
-
-  const techStack = [
-    { icon: Code, label: 'React', color: 'text-blue-500' },
-    { icon: Server, label: 'Node.js', color: 'text-green-500' },
-    { icon: Database, label: 'MongoDB', color: 'text-green-600' },
-    { icon: Cpu, label: 'C++', color: 'text-purple-500' },
-  ];
 
   return (
-    <section id="home" className="section relative overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary-500/10 rounded-full blur-3xl"></div>
-        <div className="particles-container absolute inset-0"></div>
-      </div>
-
+    <section id="home" className="section relative overflow-hidden bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
+      {/* Background decoration */}
+      <div className="absolute top-20 right-20 w-72 h-72 bg-primary-500/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-20 left-20 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl"></div>
+      
+      {/* Secret Admin Area - Hidden in plain sight */}
+      <div 
+        onClick={handleSecretClick}
+        className="fixed top-0 left-0 w-32 h-32 opacity-0 cursor-pointer z-50"
+        title="Secret Admin Area (click 5 times)"
+      />
+      
       <div className="container relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left Column - Content */}
-          <div className="animate-slide-in-left">
+        <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[calc(100vh-80px)]">
+          {/* Left content */}
+          <div className="space-y-8">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-full mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-100 dark:bg-primary-900/30 rounded-full">
               <div className="w-2 h-2 bg-primary-600 rounded-full animate-pulse"></div>
-              <span className="text-sm font-semibold">🚀 Full-Stack Developer</span>
+              <span className="text-sm font-semibold text-primary-600 dark:text-primary-400">
+                Full-Stack Developer
+              </span>
             </div>
 
-            {/* Main Title */}
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
-              <span className="block text-dark-900 dark:text-white">Building</span>
+            {/* Title */}
+            <h1 className="text-5xl md:text-6xl font-bold leading-tight">
+              <span className="block text-gray-900 dark:text-white">Building</span>
               <span className="gradient-text">Digital Excellence</span>
-              <span className="block text-dark-900 dark:text-white">with Code</span>
+              <span className="block text-gray-900 dark:text-white">with Code</span>
             </h1>
 
-            {/* Animated Typing */}
-            <div className="mb-8">
+            {/* Typing animation */}
+            <div className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 h-16">
               <TypeAnimation
                 sequence={[
                   'React & Node.js Specialist',
@@ -92,159 +67,76 @@ const Home = () => {
                 speed={50}
                 repeat={Infinity}
                 cursor={true}
-                className="text-xl md:text-2xl text-dark-600 dark:text-dark-400 font-medium"
               />
             </div>
 
             {/* Description */}
-            <p className="text-lg text-dark-600 dark:text-dark-400 mb-10 max-w-xl">
+            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-xl">
               I architect robust, scalable web applications using modern technologies. 
               Transforming complex problems into elegant, efficient solutions that 
               drive business success and user satisfaction.
             </p>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-12">
-              <button
-                onClick={handleViewProjects}
-                className="btn btn-primary group"
-              >
+            {/* Buttons */}
+            <div className="flex flex-wrap gap-4">
+              <button className="btn btn-primary group">
                 <span>View Projects</span>
-                <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
+                <FiArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
               </button>
               
-              <button
-                onClick={handleDownloadCV}
-                className="btn btn-secondary group"
-              >
-                <Download className="mr-2" />
+              <button className="btn btn-secondary group">
+                <FiDownload className="mr-2" />
                 <span>Download CV</span>
               </button>
               
-              <button
-                onClick={handleContact}
-                className="btn btn-outline"
-              >
-                <Mail className="mr-2" />
+              <button className="btn btn-outline group">
+                <FiMail className="mr-2" />
                 <span>Contact Me</span>
               </button>
             </div>
-
-            {/* Social Links */}
-            <div className="flex items-center gap-6 mb-12">
-              <span className="text-dark-600 dark:text-dark-400 font-medium">Follow me:</span>
-              <div className="flex gap-4">
-                {socialLinks.map((social) => (
-                  <a
-                    key={social.label}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 rounded-lg bg-dark-100 dark:bg-dark-800 text-dark-700 dark:text-dark-300 hover:bg-dark-200 dark:hover:bg-dark-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-                    aria-label={social.label}
-                  >
-                    <social.icon size={20} />
-                  </a>
-                ))}
-              </div>
-            </div>
           </div>
 
-          {/* Right Column - Visuals */}
-          <div className="relative animate-slide-in-right">
-            {/* Main Illustration */}
-            <div className="relative">
-              {/* Code Window */}
-              <div className="relative bg-dark-800 rounded-2xl p-6 shadow-2xl overflow-hidden group">
-                {/* Window Header */}
-                <div className="flex items-center gap-2 mb-6">
-                  <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                  <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                  <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                  <div className="ml-4 text-dark-400 text-sm font-mono">portfolio.js</div>
-                </div>
-
-                {/* Code Content */}
-                <div className="font-mono text-sm">
-                  <div className="text-dark-400 mb-2">// NestTech Portfolio</div>
-                  <div className="text-dark-400 mb-4">const developer = {'{'}</div>
-                  
-                  <div className="ml-4 mb-2">
-                    <span className="text-purple-400">name</span>
-                    <span className="text-dark-400">: </span>
-                    <span className="text-green-400">"NestTech"</span>
-                    <span className="text-dark-400">,</span>
-                  </div>
-                  
-                  <div className="ml-4 mb-2">
-                    <span className="text-purple-400">role</span>
-                    <span className="text-dark-400">: </span>
-                    <span className="text-green-400">"Full-Stack Developer"</span>
-                    <span className="text-dark-400">,</span>
-                  </div>
-                  
-                  <div className="ml-4 mb-2">
-                    <span className="text-purple-400">skills</span>
-                    <span className="text-dark-400">: [</span>
-                    <span className="text-yellow-400">"React"</span>
-                    <span className="text-dark-400">, </span>
-                    <span className="text-yellow-400">"Node.js"</span>
-                    <span className="text-dark-400">, </span>
-                    <span className="text-yellow-400">"MongoDB"</span>
-                    <span className="text-dark-400">],</span>
-                  </div>
-                  
-                  <div className="ml-4 mb-4">
-                    <span className="text-purple-400">projects</span>
-                    <span className="text-dark-400">: </span>
-                    <span className="text-blue-400">6</span>
-                    <span className="text-dark-400">,</span>
-                  </div>
-                  
-                  <div className="text-dark-400">{'}'}</div>
-                  
-                  <div className="mt-4">
-                    <span className="text-blue-400">export</span>
-                    <span className="text-dark-400"> </span>
-                    <span className="text-yellow-400">default</span>
-                    <span className="text-dark-400"> developer</span>
-                  </div>
-                </div>
-
-                {/* Cursor */}
-                <div className="absolute bottom-6 right-6 w-2 h-4 bg-primary-500 animate-blink"></div>
-              </div>
-
-              {/* Floating Tech Icons */}
-              <div className="absolute -top-6 -left-6 w-16 h-16 bg-white dark:bg-dark-800 rounded-2xl shadow-xl flex items-center justify-center animate-float">
-                <Code className="text-primary-600" size={32} />
+          {/* Right content - Code window */}
+          <div className="relative hidden lg:block">
+            <div className="bg-gray-900 rounded-2xl shadow-2xl overflow-hidden animate-float">
+              {/* Window header */}
+              <div className="flex items-center gap-2 px-4 py-3 bg-gray-800">
+                <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                <span className="ml-2 text-sm text-gray-400">portfolio.js</span>
               </div>
               
-              <div className="absolute -bottom-6 -right-6 w-16 h-16 bg-white dark:bg-dark-800 rounded-2xl shadow-xl flex items-center justify-center animate-float" style={{ animationDelay: '1s' }}>
-                <Server className="text-secondary-600" size={32} />
-              </div>
-            </div>
-
-            {/* Tech Stack */}
-            <div className="mt-12">
-              <div className="text-dark-600 dark:text-dark-400 font-medium mb-4">Tech Stack:</div>
-              <div className="flex flex-wrap gap-3">
-                {techStack.map((tech) => (
-                  <div
-                    key={tech.label}
-                    className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-dark-800 rounded-full shadow-md hover:shadow-lg transition-shadow"
-                  >
-                    <tech.icon className={tech.color} size={18} />
-                    <span className="text-sm font-medium text-dark-700 dark:text-dark-300">
-                      {tech.label}
-                    </span>
-                  </div>
-                ))}
+              {/* Code content */}
+              <div className="p-6 font-mono text-sm">
+                <pre className="text-gray-300">
+                  <span className="text-gray-500">// NestTech Portfolio</span>{'\n'}
+                  <span className="text-purple-400">const</span> <span className="text-blue-400">developer</span> = {'{'}{'\n'}
+                  {'    '}<span className="text-blue-400">name</span>: <span className="text-green-400">"NestTech"</span>,{'\n'}
+                  {'    '}<span className="text-blue-400">role</span>: <span className="text-green-400">"Full-Stack Developer"</span>,{'\n'}
+                  {'    '}<span className="text-blue-400">skills</span>: [<span className="text-green-400">"React"</span>, <span className="text-green-400">"Node.js"</span>, <span className="text-green-400">"MongoDB"</span>],{'\n'}
+                  {'    '}<span className="text-blue-400">projects</span>: 6,{'\n'}
+                  {'}'}{'\n\n'}
+                  <span className="text-yellow-400">export default</span> <span className="text-blue-400">developer</span>
+                </pre>
+                
+                {/* Blinking cursor */}
+                <div className="mt-4 flex items-center gap-2">
+                  <div className="w-2 h-4 bg-primary-500 animate-pulse"></div>
+                  <span className="text-gray-500 text-xs">Ready</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      
+      {/* Secret click counter indicator (only visible during development) */}
+      {process.env.NODE_ENV === 'development' && secretClickCount > 0 && (
+        <div className="fixed bottom-4 left-4 bg-black/50 text-white px-3 py-1 rounded-full text-xs z-50">
+          Secret clicks: {secretClickCount}/5
+        </div>
+      )}
     </section>
   );
 };

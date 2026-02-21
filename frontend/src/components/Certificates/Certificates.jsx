@@ -1,10 +1,9 @@
-// frontend/src/components/Certificates/Certificates.jsx
 import React, { useState } from 'react';
 import { 
-  Award, ExternalLink, Download, Eye, Calendar, 
-  Building, CheckCircle, X, Maximize2, Filter 
-} from 'lucide-react';
-import { Dialog } from '@headlessui/react';
+  FiAward, FiExternalLink, FiDownload, FiEye, 
+  FiCalendar, FiCheckCircle, FiX, FiFilter,
+  FiBookmark, FiStar, FiClock, FiDatabase, FiCloud, FiCpu
+} from 'react-icons/fi';
 
 const Certificates = () => {
   const [selectedCert, setSelectedCert] = useState(null);
@@ -18,11 +17,10 @@ const Certificates = () => {
       issuer: "Coursera",
       date: "2023",
       skills: ["React", "Node.js", "MongoDB", "Express"],
-      image: "/certificates/fullstack.jpg",
-      pdf: "/certificates/fullstack.pdf",
-      verified: true,
+      category: "webdev",
       credentialId: "CERT-12345",
-      category: "webdev"
+      verified: true,
+      featured: true
     },
     {
       id: 2,
@@ -30,11 +28,9 @@ const Certificates = () => {
       issuer: "Frontend Masters",
       date: "2023",
       skills: ["React", "Hooks", "Performance", "Testing"],
-      image: "/certificates/react-advanced.jpg",
-      pdf: "/certificates/react-advanced.pdf",
+      category: "frontend",
       verified: true,
-      credentialId: "FM-67890",
-      category: "frontend"
+      featured: true
     },
     {
       id: 3,
@@ -42,11 +38,9 @@ const Certificates = () => {
       issuer: "Udemy",
       date: "2023",
       skills: ["Node.js", "Express", "REST APIs", "Authentication"],
-      image: "/certificates/nodejs.jpg",
-      pdf: "/certificates/nodejs.pdf",
+      category: "backend",
       verified: true,
-      credentialId: "UDE-54321",
-      category: "backend"
+      featured: false
     },
     {
       id: 4,
@@ -54,11 +48,9 @@ const Certificates = () => {
       issuer: "MongoDB University",
       date: "2022",
       skills: ["MongoDB", "Database Design", "Aggregation", "Indexing"],
-      image: "/certificates/mongodb.jpg",
-      pdf: "/certificates/mongodb.pdf",
+      category: "database",
       verified: true,
-      credentialId: "MDB-09876",
-      category: "database"
+      featured: false
     },
     {
       id: 5,
@@ -66,11 +58,9 @@ const Certificates = () => {
       issuer: "LeetCode",
       date: "2022",
       skills: ["C++", "Algorithms", "Problem Solving", "Optimization"],
-      image: "/certificates/dsa.jpg",
-      pdf: "/certificates/dsa.pdf",
+      category: "fundamentals",
       verified: true,
-      credentialId: "LC-11223",
-      category: "fundamentals"
+      featured: false
     },
     {
       id: 6,
@@ -78,44 +68,28 @@ const Certificates = () => {
       issuer: "Amazon Web Services",
       date: "2023",
       skills: ["AWS", "Cloud Computing", "DevOps", "Security"],
-      image: "/certificates/aws.jpg",
-      pdf: "/certificates/aws.pdf",
+      category: "cloud",
       verified: true,
-      credentialId: "AWS-33445",
-      category: "cloud"
+      featured: true
     }
   ];
 
   const categories = [
-    { id: 'all', label: 'All Certificates' },
-    { id: 'webdev', label: 'Web Development' },
-    { id: 'frontend', label: 'Frontend' },
-    { id: 'backend', label: 'Backend' },
-    { id: 'database', label: 'Database' },
-    { id: 'fundamentals', label: 'Fundamentals' },
-    { id: 'cloud', label: 'Cloud' }
+    { id: 'all', label: 'All Certificates', icon: FiAward },
+    { id: 'webdev', label: 'Web Development', icon: FiBookmark },
+    { id: 'frontend', label: 'Frontend', icon: FiStar },
+    { id: 'backend', label: 'Backend', icon: FiClock },
+    { id: 'database', label: 'Database', icon: FiDatabase },
+    { id: 'cloud', label: 'Cloud', icon: FiCloud },
+    { id: 'fundamentals', label: 'Fundamentals', icon: FiCpu }
   ];
 
-  const filteredCerts = certificates.filter(cert => 
-    filter === 'all' || cert.category === filter
-  );
-
-  const openCertificateModal = (cert) => {
-    setSelectedCert(cert);
-    setIsModalOpen(true);
-  };
-
-  const handleDownload = (pdfUrl, title) => {
-    const link = document.createElement('a');
-    link.href = pdfUrl;
-    link.download = `${title.replace(/\s+/g, '_')}.pdf`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+  const filteredCerts = filter === 'all' 
+    ? certificates 
+    : certificates.filter(cert => cert.category === filter);
 
   return (
-    <section id="certificates" className="section bg-dark-50 dark:bg-dark-950">
+    <section id="certificates" className="section bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
       <div className="container">
         {/* Section Header */}
         <div className="text-center mb-16">
@@ -133,13 +107,13 @@ const Certificates = () => {
             <button
               key={category.id}
               onClick={() => setFilter(category.id)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full font-medium transition-all duration-300 ${
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-medium transition-all duration-300 ${
                 filter === category.id
-                  ? 'bg-primary-600 text-white shadow-lg'
-                  : 'bg-dark-100 dark:bg-dark-800 text-dark-700 dark:text-dark-300 hover:bg-dark-200 dark:hover:bg-dark-700'
+                  ? 'bg-primary-600 text-white shadow-lg scale-105'
+                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 shadow-md hover:shadow-lg'
               }`}
             >
-              {filter === category.id && <Filter className="w-4 h-4" />}
+              <category.icon className="w-4 h-4" />
               {category.label}
             </button>
           ))}
@@ -150,46 +124,182 @@ const Certificates = () => {
           {filteredCerts.map((cert, index) => (
             <div
               key={cert.id}
-              className="group bg-white dark:bg-dark-800 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden animate-slide-up"
-              style={{ animationDelay: `${index * 100}ms` }}
+              className="group bg-white dark:bg-gray-800 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden"
             >
-              {/* Certificate Header */}
-              <div className="p-6 border-b border-dark-100 dark:border-dark-700">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="p-3 rounded-xl bg-primary-100 dark:bg-primary-900/30">
-                    <Award className="w-6 h-6 text-primary-600 dark:text-primary-400" />
-                  </div>
-                  {cert.verified && (
-                    <div className="flex items-center gap-1 px-2 py-1 bg-green-100 dark:bg-green-900/30 rounded-full">
-                      <CheckCircle className="w-3 h-3 text-green-600 dark:text-green-400" />
-                      <span className="text-xs font-medium text-green-600 dark:text-green-400">
-                        Verified
-                      </span>
-                    </div>
+              {/* Certificate Header with Gradient */}
+              <div className="h-32 bg-gradient-to-r from-primary-600 to-purple-600 relative overflow-hidden">
+                <div className="absolute inset-0 bg-black/20"></div>
+                <div className="absolute top-4 right-4">
+                  {cert.featured && (
+                    <span className="flex items-center gap-1 px-3 py-1 bg-yellow-400 text-yellow-900 rounded-full text-xs font-bold">
+                      <FiStar className="w-3 h-3" />
+                      Featured
+                    </span>
                   )}
                 </div>
-
-                {/* Certificate Info */}
-                <div className="mb-4">
-                  <h3 className="text-xl font-bold text-dark-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-                    {cert.title}
-                  </h3>
-                  <div className="flex items-center gap-2 text-dark-600 dark:text-dark-400 mb-1">
-                    <Building className="w-4 h-4" />
-                    <span className="text-sm">{cert.issuer}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-dark-500 dark:text-dark-500">
-                    <Calendar className="w-4 h-4" />
-                    <span className="text-sm">{cert.date}</span>
+                <div className="absolute bottom-4 left-4">
+                  <div className="flex items-center gap-2">
+                    <FiAward className="w-8 h-8 text-white" />
+                    <div>
+                      <div className="text-white font-bold text-lg">{cert.issuer}</div>
+                      <div className="text-white/80 text-xs">{cert.date}</div>
+                    </div>
                   </div>
                 </div>
+              </div>
+
+              {/* Certificate Content */}
+              <div className="p-6">
+                {/* Title */}
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                  {cert.title}
+                </h3>
+
+                {/* Verification Badge */}
+                {cert.verified && (
+                  <div className="flex items-center gap-1 mb-4">
+                    <FiCheckCircle className="w-4 h-4 text-green-500" />
+                    <span className="text-xs text-green-600 dark:text-green-400 font-medium">
+                      Verified Certificate
+                    </span>
+                  </div>
+                )}
 
                 {/* Skills */}
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 mb-6">
                   {cert.skills.map((skill) => (
                     <span
                       key={skill}
-                      className="px-2 py-1 text-xs font-medium bg-dark-100 dark:bg-dark-700 text-dark-700 dark:text-dark-300 rounded"
+                      className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex items-center gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <button
+                    onClick={() => {
+                      setSelectedCert(cert);
+                      setIsModalOpen(true);
+                    }}
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                  >
+                    <FiEye className="w-4 h-4" />
+                    View Details
+                  </button>
+                  
+                  <button
+                    className="p-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                    title="Download Certificate"
+                  >
+                    <FiDownload className="w-5 h-5" />
+                  </button>
+                  
+                  {cert.credentialId && (
+                    <button
+                      className="p-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                      title="Verify Certificate"
+                    >
+                      <FiExternalLink className="w-5 h-5" />
+                    </button>
+                  )}
+                </div>
+
+                {/* Credential ID */}
+                {cert.credentialId && (
+                  <div className="mt-3 text-xs text-gray-500 dark:text-gray-400 text-center">
+                    Credential ID: {cert.credentialId}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Total Count */}
+        <div className="mt-12 text-center">
+          <div className="inline-flex items-center gap-3 px-6 py-4 bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
+            <FiAward className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+            <div>
+              <span className="text-2xl font-bold text-gray-900 dark:text-white">
+                {certificates.length}+
+              </span>
+              <span className="text-gray-600 dark:text-gray-400 ml-2">
+                Professional Certifications
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Certificate Modal */}
+      {isModalOpen && selectedCert && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            {/* Modal Header */}
+            <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-6 flex justify-between items-center">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                Certificate Details
+              </h3>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              >
+                <FiX className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6 space-y-6">
+              {/* Certificate Preview */}
+              <div className="bg-gradient-to-br from-primary-500/10 to-purple-500/10 rounded-xl p-8 text-center">
+                <FiAward className="w-16 h-16 text-primary-600 dark:text-primary-400 mx-auto mb-4" />
+                <h4 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                  {selectedCert.title}
+                </h4>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Issued by {selectedCert.issuer} • {selectedCert.date}
+                </p>
+              </div>
+
+              {/* Details Grid */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
+                  <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">Issuer</div>
+                  <div className="font-medium text-gray-900 dark:text-white">
+                    {selectedCert.issuer}
+                  </div>
+                </div>
+                <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
+                  <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">Issue Date</div>
+                  <div className="font-medium text-gray-900 dark:text-white">
+                    {selectedCert.date}
+                  </div>
+                </div>
+                {selectedCert.credentialId && (
+                  <div className="col-span-2 bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
+                    <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">
+                      Credential ID
+                    </div>
+                    <div className="font-medium text-gray-900 dark:text-white break-all">
+                      {selectedCert.credentialId}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Skills */}
+              <div>
+                <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                  Skills Validated
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {selectedCert.skills.map((skill) => (
+                    <span
+                      key={skill}
+                      className="px-4 py-2 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-lg font-medium"
                     >
                       {skill}
                     </span>
@@ -197,215 +307,21 @@ const Certificates = () => {
                 </div>
               </div>
 
-              {/* Action Buttons */}
-              <div className="p-6 pt-4">
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={() => openCertificateModal(cert)}
-                    className="flex-1 btn btn-outline py-2 text-sm"
-                  >
-                    <Eye className="w-4 h-4 mr-2" />
-                    View
-                  </button>
-                  
-                  <button
-                    onClick={() => handleDownload(cert.pdf, cert.title)}
-                    className="p-3 rounded-lg bg-dark-100 dark:bg-dark-700 text-dark-700 dark:text-dark-300 hover:bg-dark-200 dark:hover:bg-dark-600 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-                    aria-label="Download"
-                  >
-                    <Download className="w-5 h-5" />
-                  </button>
-                </div>
+              {/* Actions */}
+              <div className="flex gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <button className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+                  <FiDownload className="w-5 h-5" />
+                  Download PDF
+                </button>
+                <button className="flex-1 flex items-center justify-center gap-2 px-6 py-3 border-2 border-primary-600 text-primary-600 rounded-lg hover:bg-primary-600 hover:text-white transition-colors">
+                  <FiExternalLink className="w-5 h-5" />
+                  Verify
+                </button>
               </div>
             </div>
-          ))}
-        </div>
-
-        {/* Additional Info */}
-        <div className="mt-16 text-center">
-          <div className="inline-flex items-center gap-3 px-6 py-3 bg-white dark:bg-dark-800 rounded-xl shadow-lg">
-            <Award className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-            <span className="text-dark-700 dark:text-dark-300 font-medium">
-              {certificates.length} Professional Certifications Earned
-            </span>
           </div>
         </div>
-      </div>
-
-      {/* Certificate Modal */}
-      <Dialog
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        className="relative z-50"
-      >
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" aria-hidden="true" />
-        
-        <div className="fixed inset-0 flex items-center justify-center p-4">
-          <Dialog.Panel className="mx-auto max-w-4xl w-full bg-white dark:bg-dark-800 rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
-            {selectedCert && (
-              <>
-                {/* Modal Header */}
-                <div className="sticky top-0 z-10 p-6 bg-white dark:bg-dark-800 border-b border-dark-200 dark:border-dark-700">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="p-3 rounded-xl bg-primary-100 dark:bg-primary-900/30">
-                        <Award className="w-6 h-6 text-primary-600 dark:text-primary-400" />
-                      </div>
-                      <div>
-                        <Dialog.Title className="text-2xl font-bold text-dark-900 dark:text-white">
-                          {selectedCert.title}
-                        </Dialog.Title>
-                        <p className="text-dark-600 dark:text-dark-400">
-                          {selectedCert.issuer}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => handleDownload(selectedCert.pdf, selectedCert.title)}
-                        className="p-2 rounded-lg hover:bg-dark-100 dark:hover:bg-dark-700 transition-colors"
-                        aria-label="Download"
-                      >
-                        <Download className="w-5 h-5 text-dark-600 dark:text-dark-400" />
-                      </button>
-                      <button
-                        onClick={() => setIsModalOpen(false)}
-                        className="p-2 rounded-lg hover:bg-dark-100 dark:hover:bg-dark-700 transition-colors"
-                      >
-                        <X className="w-6 h-6 text-dark-600 dark:text-dark-400" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Modal Content */}
-                <div className="p-6">
-                  <div className="grid lg:grid-cols-2 gap-8">
-                    {/* Left Column - Certificate Image */}
-                    <div className="space-y-6">
-                      <div className="bg-gradient-to-br from-primary-500/10 to-secondary-500/10 rounded-2xl p-8 flex items-center justify-center">
-                        <div className="text-center">
-                          <div className="text-6xl mb-4">🏆</div>
-                          <div className="text-2xl font-bold text-dark-900 dark:text-white mb-2">
-                            Certificate of Completion
-                          </div>
-                          <div className="text-dark-600 dark:text-dark-400">
-                            This certifies that
-                          </div>
-                          <div className="text-xl font-bold text-primary-600 dark:text-primary-400 my-2">
-                            NestTech
-                          </div>
-                          <div className="text-dark-600 dark:text-dark-400">
-                            has successfully completed
-                          </div>
-                          <div className="text-lg font-semibold text-dark-900 dark:text-white mt-2">
-                            {selectedCert.title}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Certificate Details */}
-                      <div className="bg-dark-50 dark:bg-dark-900 rounded-xl p-6">
-                        <h4 className="text-lg font-semibold text-dark-900 dark:text-white mb-4">
-                          Certificate Details
-                        </h4>
-                        <div className="space-y-3">
-                          <div className="flex justify-between">
-                            <span className="text-dark-600 dark:text-dark-400">Issuer:</span>
-                            <span className="font-medium text-dark-900 dark:text-white">
-                              {selectedCert.issuer}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-dark-600 dark:text-dark-400">Date Issued:</span>
-                            <span className="font-medium text-dark-900 dark:text-white">
-                              {selectedCert.date}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-dark-600 dark:text-dark-400">Credential ID:</span>
-                            <span className="font-medium text-dark-900 dark:text-white">
-                              {selectedCert.credentialId}
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-dark-600 dark:text-dark-400">Status:</span>
-                            <span className="inline-flex items-center gap-1 text-green-600 dark:text-green-400 font-medium">
-                              <CheckCircle className="w-4 h-4" />
-                              Verified
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Right Column - Skills & Description */}
-                    <div className="space-y-6">
-                      {/* Skills Learned */}
-                      <div>
-                        <h4 className="text-lg font-semibold text-dark-900 dark:text-white mb-4">
-                          Skills Validated
-                        </h4>
-                        <div className="flex flex-wrap gap-3">
-                          {selectedCert.skills.map((skill) => (
-                            <div
-                              key={skill}
-                              className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-dark-900 border border-dark-200 dark:border-dark-700 rounded-lg"
-                            >
-                              <CheckCircle className="w-4 h-4 text-green-500" />
-                              <span className="font-medium text-dark-900 dark:text-white">
-                                {skill}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Description */}
-                      <div>
-                        <h4 className="text-lg font-semibold text-dark-900 dark:text-white mb-4">
-                          About This Certification
-                        </h4>
-                        <div className="space-y-3 text-dark-600 dark:text-dark-400">
-                          <p>
-                            This certification validates comprehensive knowledge and practical skills 
-                            in {selectedCert.title.toLowerCase()}. The program covers both theoretical 
-                            concepts and hands-on implementation.
-                          </p>
-                          <p>
-                            Topics include best practices, industry standards, and real-world 
-                            applications that demonstrate proficiency in the relevant technologies.
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Action Buttons */}
-                      <div className="pt-6 border-t border-dark-200 dark:border-dark-700">
-                        <div className="flex gap-3">
-                          <button
-                            onClick={() => handleDownload(selectedCert.pdf, selectedCert.title)}
-                            className="flex-1 btn btn-primary"
-                          >
-                            <Download className="w-5 h-5 mr-2" />
-                            Download PDF
-                          </button>
-                          <button
-                            onClick={() => window.open(selectedCert.pdf, '_blank')}
-                            className="flex-1 btn btn-outline"
-                          >
-                            <ExternalLink className="w-5 h-5 mr-2" />
-                            Open in New Tab
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
-          </Dialog.Panel>
-        </div>
-      </Dialog>
+      )}
     </section>
   );
 };
