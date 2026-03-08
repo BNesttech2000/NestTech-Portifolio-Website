@@ -1,144 +1,61 @@
-// frontend/src/components/Projects/Projects.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ExternalLink, Github, Eye, Code, Server, 
-  Database, Shield, Zap, Users, Lock 
+  Database, Shield, Zap, Users, Lock, X, Check
 } from 'lucide-react';
 import { Dialog } from '@headlessui/react';
+import axios from 'axios';
 
 const Projects = () => {
   const [activeFilter, setActiveFilter] = useState('all');
   const [selectedProject, setSelectedProject] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const projects = [
-    {
-      id: 1,
-      title: "SkyBook Airlines Booking System",
-      category: "fullstack",
-      problem: "Manual flight booking processes causing inefficiency and errors.",
-      solution: "Developed a comprehensive airline management system with real-time seat availability, automated ticketing, and admin dashboard.",
-      technologies: ["React", "Node.js", "Express", "MongoDB", "JWT", "Socket.io"],
-      role: "Full-Stack Developer & System Architect",
-      features: [
-        "Real-time seat booking with conflict prevention",
-        "Automated email/SMS notifications",
-        "Admin analytics dashboard",
-        "Secure payment integration"
-      ],
-      github: "https://github.com/nesttech/airline-booking",
-      demo: "https://skybook.nesttech.dev",
-      image: "/projects/airline-system.jpg",
-      icon: Users,
-      color: "text-blue-500"
-    },
-    {
-      id: 2,
-      title: "Campus Hostel Management System",
-      category: "fullstack",
-      problem: "Inefficient hostel allocation and maintenance tracking in educational institutions.",
-      solution: "Digital platform automating room allocation, maintenance requests, and fee management.",
-      technologies: ["React", "Node.js", "MySQL", "Express", "Redux"],
-      role: "Lead Developer & Database Designer",
-      features: [
-        "Automated room allocation algorithm",
-        "Maintenance request tracking system",
-        "Fee management with payment history",
-        "Role-based access control"
-      ],
-      github: "https://github.com/nesttech/hostel-management",
-      demo: null,
-      image: "/projects/hostel-system.jpg",
-      icon: Database,
-      color: "text-green-500"
-    },
-    {
-      id: 3,
-      title: "CineMax Cinema Booking System",
-      category: "fullstack",
-      problem: "Long queues and manual seat selection at movie theaters.",
-      solution: "Interactive cinema booking platform with seat selection, payment integration, and QR tickets.",
-      technologies: ["React", "Node.js", "MongoDB", "Stripe API", "WebSockets"],
-      role: "Full-Stack Developer",
-      features: [
-        "Interactive seat selection with real-time updates",
-        "Multiple payment gateway integration",
-        "QR-based ticket verification",
-        "Movie recommendation engine"
-      ],
-      github: "https://github.com/nesttech/cinema-booking",
-      demo: "https://cinemax.nesttech.dev",
-      image: "/projects/cinema-system.jpg",
-      icon: Eye,
-      color: "text-purple-500"
-    },
-    {
-      id: 4,
-      title: "Secure Auth System",
-      category: "backend",
-      problem: "Need for secure, scalable authentication across multiple applications.",
-      solution: "Comprehensive authentication system with multi-factor authentication, role-based access, and audit logging.",
-      technologies: ["Node.js", "Express", "JWT", "Redis", "PostgreSQL"],
-      role: "Backend Developer & Security Specialist",
-      features: [
-        "JWT-based authentication with refresh tokens",
-        "Two-factor authentication support",
-        "Role-based access control",
-        "Comprehensive audit logging"
-      ],
-      github: "https://github.com/nesttech/auth-system",
-      demo: null,
-      image: "/projects/auth-system.jpg",
-      icon: Lock,
-      color: "text-red-500"
-    },
-    {
-      id: 5,
-      title: "Algorithm Visualization Platform",
-      category: "frontend",
-      problem: "Difficulty understanding complex algorithms through static content.",
-      solution: "Interactive visualization tool demonstrating sorting, searching, and graph algorithms.",
-      technologies: ["React", "D3.js", "TypeScript", "Tailwind CSS"],
-      role: "Frontend Developer & Algorithm Specialist",
-      features: [
-        "Step-by-step algorithm visualization",
-        "Speed and data size controls",
-        "Code explanation alongside visualization",
-        "Multiple algorithm categories"
-      ],
-      github: "https://github.com/nesttech/algo-visualizer",
-      demo: "https://algo.nesttech.dev",
-      image: "/projects/algo-visualizer.jpg",
-      icon: Zap,
-      color: "text-yellow-500"
-    },
-    {
-      id: 6,
-      title: "E-commerce Analytics Dashboard",
-      category: "fullstack",
-      problem: "Lack of real-time insights for e-commerce business decisions.",
-      solution: "Real-time analytics dashboard with sales tracking, customer insights, and inventory management.",
-      technologies: ["React", "Node.js", "MongoDB", "Chart.js", "WebSockets"],
-      role: "Full-Stack Developer & Data Analyst",
-      features: [
-        "Real-time sales tracking and visualization",
-        "Customer behavior analytics",
-        "Inventory management system",
-        "Automated report generation"
-      ],
-      github: "https://github.com/nesttech/ecommerce-analytics",
-      demo: "https://analytics.nesttech.dev",
-      image: "/projects/analytics-dashboard.jpg",
-      icon: Server,
-      color: "text-indigo-500"
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
+  const fetchProjects = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/projects');
+      setProjects(response.data.data);
+    } catch (error) {
+      console.error('Error fetching projects:', error);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
+
+  // Map category to icon
+  const getIcon = (category) => {
+    switch(category) {
+      case 'fullstack': return Server;
+      case 'frontend': return Code;
+      case 'backend': return Database;
+      case 'fundamentals': return Zap;
+      default: return Users;
+    }
+  };
+
+  // Map category to color
+  const getColor = (category) => {
+    switch(category) {
+      case 'fullstack': return 'text-blue-500';
+      case 'frontend': return 'text-purple-500';
+      case 'backend': return 'text-green-500';
+      case 'fundamentals': return 'text-yellow-500';
+      default: return 'text-indigo-500';
+    }
+  };
 
   const filters = [
     { id: 'all', label: 'All Projects' },
     { id: 'fullstack', label: 'Full-Stack' },
     { id: 'frontend', label: 'Frontend' },
     { id: 'backend', label: 'Backend' },
+    { id: 'fundamentals', label: 'Fundamentals' },
   ];
 
   const filteredProjects = projects.filter(project => 
@@ -149,6 +66,18 @@ const Projects = () => {
     setSelectedProject(project);
     setIsModalOpen(true);
   };
+
+  if (loading) {
+    return (
+      <section id="projects" className="section">
+        <div className="container">
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="projects" className="section">
@@ -182,97 +111,117 @@ const Projects = () => {
 
         {/* Projects Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProjects.map((project, index) => (
-            <div
-              key={project.id}
-              className="group relative bg-white dark:bg-dark-800 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 animate-slide-up"
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              {/* Project Icon */}
-              <div className="absolute top-6 right-6 z-10">
-                <div className="p-3 rounded-xl bg-white/10 backdrop-blur-sm">
-                  <project.icon className={`w-6 h-6 ${project.color}`} />
+          {filteredProjects.map((project, index) => {
+            const Icon = getIcon(project.category);
+            const color = getColor(project.category);
+            
+            return (
+              <div
+                key={project._id}
+                className="group relative bg-white dark:bg-dark-800 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 animate-slide-up"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                {/* Project Icon */}
+                <div className="absolute top-6 right-6 z-10">
+                  <div className="p-3 rounded-xl bg-white/10 backdrop-blur-sm">
+                    <Icon className={`w-6 h-6 ${color}`} />
+                  </div>
                 </div>
-              </div>
 
-              {/* Project Image */}
-              <div className="h-48 bg-gradient-to-br from-primary-500/20 to-secondary-500/20 relative overflow-hidden">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-4xl font-bold text-white/30">
-                    {project.title.split(' ')[0]}
+                {/* Project Image */}
+                <div className="h-48 bg-gradient-to-br from-primary-500/20 to-secondary-500/20 relative overflow-hidden">
+                  {project.imageUrl ? (
+                    <img 
+                      src={project.imageUrl} 
+                      alt={project.title}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="text-4xl font-bold text-white/30">
+                        {project.title.split(' ')[0]}
+                      </div>
+                    </div>
+                  )}
+                  {project.featured && (
+                    <div className="absolute top-2 left-2 bg-yellow-400 text-yellow-900 px-2 py-1 rounded-full text-xs font-bold">
+                      ⭐ Featured
+                    </div>
+                  )}
+                </div>
+
+                {/* Project Content */}
+                <div className="p-6">
+                  {/* Category Badge */}
+                  <span className="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 mb-4">
+                    {project.category?.charAt(0).toUpperCase() + project.category?.slice(1)}
+                  </span>
+
+                  {/* Title */}
+                  <h3 className="text-xl font-bold text-dark-900 dark:text-white mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                    {project.title}
+                  </h3>
+
+                  {/* Description */}
+                  <p className="text-dark-600 dark:text-dark-400 mb-4 line-clamp-2">
+                    {project.description || project.solution}
+                  </p>
+
+                  {/* Technologies */}
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {project.technologies?.slice(0, 3).map((tech) => (
+                      <span
+                        key={tech}
+                        className="px-2 py-1 text-xs font-medium bg-dark-100 dark:bg-dark-700 text-dark-700 dark:text-dark-300 rounded"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                    {project.technologies?.length > 3 && (
+                      <span className="px-2 py-1 text-xs font-medium text-dark-500">
+                        +{project.technologies.length - 3}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => openProjectModal(project)}
+                      className="flex-1 btn btn-outline py-2 text-sm"
+                    >
+                      <Eye className="w-4 h-4 mr-2" />
+                      View Details
+                    </button>
+                    
+                    {project.githubUrl && (
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2 rounded-lg bg-dark-100 dark:bg-dark-700 text-dark-700 dark:text-dark-300 hover:bg-dark-200 dark:hover:bg-dark-600 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                        aria-label="GitHub"
+                      >
+                        <Github className="w-5 h-5" />
+                      </a>
+                    )}
+                    
+                    {project.demoUrl && (
+                      <a
+                        href={project.demoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2 rounded-lg bg-dark-100 dark:bg-dark-700 text-dark-700 dark:text-dark-300 hover:bg-dark-200 dark:hover:bg-dark-600 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                        aria-label="Live Demo"
+                      >
+                        <ExternalLink className="w-5 h-5" />
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>
-
-              {/* Project Content */}
-              <div className="p-6">
-                {/* Category Badge */}
-                <span className="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 mb-4">
-                  {project.category.charAt(0).toUpperCase() + project.category.slice(1)}
-                </span>
-
-                {/* Title */}
-                <h3 className="text-xl font-bold text-dark-900 dark:text-white mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-                  {project.title}
-                </h3>
-
-                {/* Description */}
-                <p className="text-dark-600 dark:text-dark-400 mb-4 line-clamp-2">
-                  {project.solution}
-                </p>
-
-                {/* Technologies */}
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {project.technologies.slice(0, 3).map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-2 py-1 text-xs font-medium bg-dark-100 dark:bg-dark-700 text-dark-700 dark:text-dark-300 rounded"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                  {project.technologies.length > 3 && (
-                    <span className="px-2 py-1 text-xs font-medium text-dark-500">
-                      +{project.technologies.length - 3}
-                    </span>
-                  )}
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={() => openProjectModal(project)}
-                    className="flex-1 btn btn-outline py-2 text-sm"
-                  >
-                    <Eye className="w-4 h-4 mr-2" />
-                    View Details
-                  </button>
-                  
-                  <a
-                    href={project.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 rounded-lg bg-dark-100 dark:bg-dark-700 text-dark-700 dark:text-dark-300 hover:bg-dark-200 dark:hover:bg-dark-600 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-                    aria-label="GitHub"
-                  >
-                    <Github className="w-5 h-5" />
-                  </a>
-                  
-                  {project.demo && (
-                    <a
-                      href={project.demo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2 rounded-lg bg-dark-100 dark:bg-dark-700 text-dark-700 dark:text-dark-300 hover:bg-dark-200 dark:hover:bg-dark-600 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-                      aria-label="Live Demo"
-                    >
-                      <ExternalLink className="w-5 h-5" />
-                    </a>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* View More */}
@@ -315,50 +264,77 @@ const Projects = () => {
                     </button>
                   </div>
                   <p className="text-dark-600 dark:text-dark-400 mt-2">
-                    {selectedProject.role}
+                    {selectedProject.role || 'Full-Stack Developer'}
                   </p>
                 </div>
 
                 {/* Modal Content */}
-                <div className="p-6">
+                <div className="p-6 max-h-[70vh] overflow-y-auto">
                   <div className="grid md:grid-cols-2 gap-8">
                     {/* Left Column */}
                     <div>
-                      <div className="mb-6">
-                        <h4 className="text-lg font-semibold text-dark-900 dark:text-white mb-2">
-                          Problem Statement
-                        </h4>
-                        <p className="text-dark-600 dark:text-dark-400">
-                          {selectedProject.problem}
-                        </p>
-                      </div>
+                      {selectedProject.imageUrl && (
+                        <div className="mb-6 rounded-lg overflow-hidden">
+                          <img 
+                            src={selectedProject.imageUrl} 
+                            alt={selectedProject.title}
+                            className="w-full h-48 object-cover"
+                          />
+                        </div>
+                      )}
 
-                      <div className="mb-6">
-                        <h4 className="text-lg font-semibold text-dark-900 dark:text-white mb-2">
-                          Solution
-                        </h4>
-                        <p className="text-dark-600 dark:text-dark-400">
-                          {selectedProject.solution}
-                        </p>
-                      </div>
+                      {selectedProject.problemStatement && (
+                        <div className="mb-6">
+                          <h4 className="text-lg font-semibold text-dark-900 dark:text-white mb-2">
+                            Problem Statement
+                          </h4>
+                          <p className="text-dark-600 dark:text-dark-400">
+                            {selectedProject.problemStatement}
+                          </p>
+                        </div>
+                      )}
 
-                      <div>
-                        <h4 className="text-lg font-semibold text-dark-900 dark:text-white mb-3">
-                          Key Features
-                        </h4>
-                        <ul className="space-y-2">
-                          {selectedProject.features.map((feature, index) => (
-                            <li key={index} className="flex items-start gap-2">
-                              <div className="w-5 h-5 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center mt-0.5">
-                                <Check className="w-3 h-3 text-primary-600 dark:text-primary-400" />
-                              </div>
-                              <span className="text-dark-600 dark:text-dark-400">
-                                {feature}
-                              </span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                      {selectedProject.solution && (
+                        <div className="mb-6">
+                          <h4 className="text-lg font-semibold text-dark-900 dark:text-white mb-2">
+                            Solution
+                          </h4>
+                          <p className="text-dark-600 dark:text-dark-400">
+                            {selectedProject.solution}
+                          </p>
+                        </div>
+                      )}
+
+                      {selectedProject.description && !selectedProject.solution && (
+                        <div className="mb-6">
+                          <h4 className="text-lg font-semibold text-dark-900 dark:text-white mb-2">
+                            Description
+                          </h4>
+                          <p className="text-dark-600 dark:text-dark-400">
+                            {selectedProject.description}
+                          </p>
+                        </div>
+                      )}
+
+                      {selectedProject.features && selectedProject.features.length > 0 && (
+                        <div>
+                          <h4 className="text-lg font-semibold text-dark-900 dark:text-white mb-3">
+                            Key Features
+                          </h4>
+                          <ul className="space-y-2">
+                            {selectedProject.features.map((feature, index) => (
+                              <li key={index} className="flex items-start gap-2">
+                                <div className="w-5 h-5 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center mt-0.5">
+                                  <Check className="w-3 h-3 text-primary-600 dark:text-primary-400" />
+                                </div>
+                                <span className="text-dark-600 dark:text-dark-400">
+                                  {feature}
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
                     </div>
 
                     {/* Right Column */}
@@ -368,7 +344,7 @@ const Projects = () => {
                           Technologies Used
                         </h4>
                         <div className="flex flex-wrap gap-2">
-                          {selectedProject.technologies.map((tech) => (
+                          {selectedProject.technologies?.map((tech) => (
                             <span
                               key={tech}
                               className="px-3 py-1.5 bg-dark-100 dark:bg-dark-700 text-dark-700 dark:text-dark-300 rounded-lg text-sm font-medium"
@@ -381,25 +357,67 @@ const Projects = () => {
 
                       <div className="mb-6">
                         <h4 className="text-lg font-semibold text-dark-900 dark:text-white mb-3">
+                          Project Status
+                        </h4>
+                        <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
+                          selectedProject.status === 'completed' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' :
+                          selectedProject.status === 'in-progress' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' :
+                          'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-400'
+                        }`}>
+                          {selectedProject.status || 'Completed'}
+                        </span>
+                      </div>
+
+                      {selectedProject.challenges && selectedProject.challenges.length > 0 && (
+                        <div className="mb-6">
+                          <h4 className="text-lg font-semibold text-dark-900 dark:text-white mb-3">
+                            Challenges Overcome
+                          </h4>
+                          <ul className="list-disc list-inside space-y-1 text-dark-600 dark:text-dark-400">
+                            {selectedProject.challenges.map((challenge, index) => (
+                              <li key={index}>{challenge}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {selectedProject.learnings && selectedProject.learnings.length > 0 && (
+                        <div className="mb-6">
+                          <h4 className="text-lg font-semibold text-dark-900 dark:text-white mb-3">
+                            Key Learnings
+                          </h4>
+                          <ul className="list-disc list-inside space-y-1 text-dark-600 dark:text-dark-400">
+                            {selectedProject.learnings.map((learning, index) => (
+                              <li key={index}>{learning}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {/* Project Links */}
+                      <div className="mt-6 pt-6 border-t border-dark-200 dark:border-dark-700">
+                        <h4 className="text-lg font-semibold text-dark-900 dark:text-white mb-3">
                           Project Links
                         </h4>
                         <div className="space-y-3">
-                          <a
-                            href={selectedProject.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-3 p-3 bg-dark-100 dark:bg-dark-700 rounded-lg hover:bg-dark-200 dark:hover:bg-dark-600 transition-colors group"
-                          >
-                            <Github className="w-5 h-5 text-dark-700 dark:text-dark-300 group-hover:text-primary-600 dark:group-hover:text-primary-400" />
-                            <span className="font-medium text-dark-700 dark:text-dark-300 group-hover:text-primary-600 dark:group-hover:text-primary-400">
-                              View Source Code
-                            </span>
-                            <ExternalLink className="w-4 h-4 ml-auto text-dark-400" />
-                          </a>
-                          
-                          {selectedProject.demo && (
+                          {selectedProject.githubUrl && (
                             <a
-                              href={selectedProject.demo}
+                              href={selectedProject.githubUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-3 p-3 bg-dark-100 dark:bg-dark-700 rounded-lg hover:bg-dark-200 dark:hover:bg-dark-600 transition-colors group"
+                            >
+                              <Github className="w-5 h-5 text-dark-700 dark:text-dark-300 group-hover:text-primary-600 dark:group-hover:text-primary-400" />
+                              <span className="font-medium text-dark-700 dark:text-dark-300 group-hover:text-primary-600 dark:group-hover:text-primary-400">
+                                View Source Code
+                              </span>
+                              <ExternalLink className="w-4 h-4 ml-auto text-dark-400" />
+                            </a>
+                          )}
+                          
+                          {selectedProject.demoUrl && (
+                            <a
+                              href={selectedProject.demoUrl}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="flex items-center gap-3 p-3 bg-dark-100 dark:bg-dark-700 rounded-lg hover:bg-dark-200 dark:hover:bg-dark-600 transition-colors group"

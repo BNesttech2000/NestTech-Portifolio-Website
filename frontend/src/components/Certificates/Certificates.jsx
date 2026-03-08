@@ -1,78 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   FiAward, FiExternalLink, FiDownload, FiEye, 
   FiCalendar, FiCheckCircle, FiX, FiFilter,
   FiBookmark, FiStar, FiClock, FiDatabase, FiCloud, FiCpu
 } from 'react-icons/fi';
+import axios from 'axios';
 
 const Certificates = () => {
   const [selectedCert, setSelectedCert] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filter, setFilter] = useState('all');
+  const [certificates, setCertificates] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const certificates = [
-    {
-      id: 1,
-      title: "Full Stack Web Development",
-      issuer: "Coursera",
-      date: "2023",
-      skills: ["React", "Node.js", "MongoDB", "Express"],
-      category: "webdev",
-      credentialId: "CERT-12345",
-      verified: true,
-      featured: true
-    },
-    {
-      id: 2,
-      title: "React Advanced Patterns",
-      issuer: "Frontend Masters",
-      date: "2023",
-      skills: ["React", "Hooks", "Performance", "Testing"],
-      category: "frontend",
-      verified: true,
-      featured: true
-    },
-    {
-      id: 3,
-      title: "Node.js Backend Development",
-      issuer: "Udemy",
-      date: "2023",
-      skills: ["Node.js", "Express", "REST APIs", "Authentication"],
-      category: "backend",
-      verified: true,
-      featured: false
-    },
-    {
-      id: 4,
-      title: "MongoDB for Developers",
-      issuer: "MongoDB University",
-      date: "2022",
-      skills: ["MongoDB", "Database Design", "Aggregation", "Indexing"],
-      category: "database",
-      verified: true,
-      featured: false
-    },
-    {
-      id: 5,
-      title: "Data Structures & Algorithms",
-      issuer: "LeetCode",
-      date: "2022",
-      skills: ["C++", "Algorithms", "Problem Solving", "Optimization"],
-      category: "fundamentals",
-      verified: true,
-      featured: false
-    },
-    {
-      id: 6,
-      title: "AWS Cloud Practitioner",
-      issuer: "Amazon Web Services",
-      date: "2023",
-      skills: ["AWS", "Cloud Computing", "DevOps", "Security"],
-      category: "cloud",
-      verified: true,
-      featured: true
+  useEffect(() => {
+    fetchCertificates();
+  }, []);
+
+  const fetchCertificates = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/certificates');
+      setCertificates(response.data.data);
+    } catch (error) {
+      console.error('Error fetching certificates:', error);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
   const categories = [
     { id: 'all', label: 'All Certificates', icon: FiAward },
@@ -87,6 +41,18 @@ const Certificates = () => {
   const filteredCerts = filter === 'all' 
     ? certificates 
     : certificates.filter(cert => cert.category === filter);
+
+  if (loading) {
+    return (
+      <section id="certificates" className="section bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+        <div className="container">
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="certificates" className="section bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
@@ -123,7 +89,7 @@ const Certificates = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredCerts.map((cert, index) => (
             <div
-              key={cert.id}
+              key={cert._id}
               className="group bg-white dark:bg-gray-800 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden"
             >
               {/* Certificate Header with Gradient */}
@@ -142,7 +108,9 @@ const Certificates = () => {
                     <FiAward className="w-8 h-8 text-white" />
                     <div>
                       <div className="text-white font-bold text-lg">{cert.issuer}</div>
-                      <div className="text-white/80 text-xs">{cert.date}</div>
+                      <div className="text-white/80 text-xs">
+                        {new Date(cert.issueDate).getFullYear()}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -167,7 +135,7 @@ const Certificates = () => {
 
                 {/* Skills */}
                 <div className="flex flex-wrap gap-2 mb-6">
-                  {cert.skills.map((skill) => (
+                  {cert.skills?.map((skill) => (
                     <span
                       key={skill}
                       className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium"
@@ -190,20 +158,27 @@ const Certificates = () => {
                     View Details
                   </button>
                   
-                  <button
-                    className="p-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-                    title="Download Certificate"
-                  >
-                    <FiDownload className="w-5 h-5" />
-                  </button>
+                  {cert.imageUrl && (
+                    <a
+                      href={cert.imageUrl}
+                      download
+                      className="p-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                      title="Download Certificate"
+                    >
+                      <FiDownload className="w-5 h-5" />
+                    </a>
+                  )}
                   
                   {cert.credentialId && (
-                    <button
+                    <a
+                      href={cert.credentialUrl || '#'}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="p-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                       title="Verify Certificate"
                     >
                       <FiExternalLink className="w-5 h-5" />
-                    </button>
+                    </a>
                   )}
                 </div>
 
@@ -260,7 +235,7 @@ const Certificates = () => {
                   {selectedCert.title}
                 </h4>
                 <p className="text-gray-600 dark:text-gray-400">
-                  Issued by {selectedCert.issuer} • {selectedCert.date}
+                  Issued by {selectedCert.issuer} • {new Date(selectedCert.issueDate).getFullYear()}
                 </p>
               </div>
 
@@ -275,7 +250,7 @@ const Certificates = () => {
                 <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
                   <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">Issue Date</div>
                   <div className="font-medium text-gray-900 dark:text-white">
-                    {selectedCert.date}
+                    {new Date(selectedCert.issueDate).toLocaleDateString()}
                   </div>
                 </div>
                 {selectedCert.credentialId && (
@@ -296,7 +271,7 @@ const Certificates = () => {
                   Skills Validated
                 </h4>
                 <div className="flex flex-wrap gap-2">
-                  {selectedCert.skills.map((skill) => (
+                  {selectedCert.skills?.map((skill) => (
                     <span
                       key={skill}
                       className="px-4 py-2 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-lg font-medium"
@@ -309,14 +284,27 @@ const Certificates = () => {
 
               {/* Actions */}
               <div className="flex gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                <button className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
-                  <FiDownload className="w-5 h-5" />
-                  Download PDF
-                </button>
-                <button className="flex-1 flex items-center justify-center gap-2 px-6 py-3 border-2 border-primary-600 text-primary-600 rounded-lg hover:bg-primary-600 hover:text-white transition-colors">
-                  <FiExternalLink className="w-5 h-5" />
-                  Verify
-                </button>
+                {selectedCert.imageUrl && (
+                  <a
+                    href={selectedCert.imageUrl}
+                    download
+                    className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                  >
+                    <FiDownload className="w-5 h-5" />
+                    Download PDF
+                  </a>
+                )}
+                {selectedCert.credentialUrl && (
+                  <a
+                    href={selectedCert.credentialUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 flex items-center justify-center gap-2 px-6 py-3 border-2 border-primary-600 text-primary-600 rounded-lg hover:bg-primary-600 hover:text-white transition-colors"
+                  >
+                    <FiExternalLink className="w-5 h-5" />
+                    Verify
+                  </a>
+                )}
               </div>
             </div>
           </div>
