@@ -1,8 +1,8 @@
-// frontend/src/components/Experience/Experience.jsx
+// src/components/Experience/Experience.jsx
 import React from 'react';
 import { 
   Briefcase, GraduationCap, Calendar, MapPin, 
-  Award, TrendingUp, Users, Code, Server, 
+  Award, TrendingUp, Code, Server, 
   Database, Cpu, GitBranch 
 } from 'lucide-react';
 
@@ -15,12 +15,11 @@ const Experience = () => {
       company: 'Tech Solutions Inc.',
       location: 'Remote',
       period: '2022 - Present',
-      description: 'Led development of multiple web applications using React and Node.js. Improved application performance by 40% through optimization techniques.',
+      description: 'Led development of multiple web applications using React and Node.js.',
       achievements: [
         'Architected and deployed 5+ full-stack applications',
-        'Reduced server response time by 60% through database optimization',
-        'Mentored 3 junior developers in best practices',
-        'Implemented CI/CD pipeline reducing deployment time by 70%'
+        'Reduced server response time by 60%',
+        'Mentored 3 junior developers'
       ],
       technologies: ['React', 'Node.js', 'MongoDB', 'AWS', 'Docker'],
       icon: Briefcase,
@@ -33,14 +32,13 @@ const Experience = () => {
       company: 'Digital Agency',
       location: 'New York, NY',
       period: '2021 - 2022',
-      description: 'Developed responsive web applications with focus on user experience and accessibility.',
+      description: 'Developed responsive web applications with focus on user experience.',
       achievements: [
-        'Built 10+ client websites with 95%+ accessibility scores',
-        'Improved site performance scores by 50%',
-        'Collaborated with design team on component library',
+        'Built 10+ client websites',
+        'Improved site performance by 50%',
         'Reduced page load time by 40%'
       ],
-      technologies: ['React', 'TypeScript', 'Next.js', 'Tailwind CSS', 'GraphQL'],
+      technologies: ['React', 'TypeScript', 'Next.js', 'Tailwind CSS'],
       icon: Code,
       color: 'text-purple-500'
     },
@@ -51,14 +49,13 @@ const Experience = () => {
       institution: 'University of Technology',
       location: 'San Francisco, CA',
       period: '2018 - 2022',
-      description: 'Specialized in Software Engineering and Web Development. Graduated with Honors.',
+      description: 'Specialized in Software Engineering and Web Development.',
       achievements: [
         'GPA: 3.8/4.0',
-        'Dean\'s List all semesters',
-        'President of Computer Science Club',
-        'Published research paper on algorithm optimization'
+        "Dean's List all semesters",
+        'President of Computer Science Club'
       ],
-      technologies: ['C++', 'Java', 'Python', 'Data Structures', 'Algorithms'],
+      technologies: ['C++', 'Java', 'Python', 'Data Structures'],
       icon: GraduationCap,
       color: 'text-green-500'
     },
@@ -69,11 +66,10 @@ const Experience = () => {
       institution: 'Coding Academy',
       location: 'Online',
       period: '2021',
-      description: 'Intensive program covering modern web development technologies and best practices.',
+      description: 'Intensive program covering modern web development technologies.',
       achievements: [
         'Top 5% of cohort',
         'Built 4 major portfolio projects',
-        'Received Excellence in Backend Development award',
         'Completed 500+ hours of coding'
       ],
       technologies: ['JavaScript', 'React', 'Node.js', 'Express', 'MongoDB'],
@@ -83,74 +79,64 @@ const Experience = () => {
   ];
 
   const skills = [
-    { category: 'Frontend', icon: Code, items: ['React', 'TypeScript', 'Next.js', 'Tailwind CSS', 'Redux'] },
-    { category: 'Backend', icon: Server, items: ['Node.js', 'Express', 'Python', 'REST APIs', 'GraphQL'] },
-    { category: 'Database', icon: Database, items: ['MongoDB', 'PostgreSQL', 'Redis', 'MySQL', 'Firebase'] },
-    { category: 'DevOps', icon: GitBranch, items: ['Docker', 'AWS', 'Git', 'CI/CD', 'NGINX'] },
-    { category: 'Fundamentals', icon: Cpu, items: ['C++', 'Data Structures', 'Algorithms', 'OOP', 'System Design'] }
+    { category: 'Frontend', icon: Code, items: ['React', 'TypeScript', 'Next.js', 'Tailwind CSS'] },
+    { category: 'Backend', icon: Server, items: ['Node.js', 'Express', 'Python', 'REST APIs'] },
+    { category: 'Database', icon: Database, items: ['MongoDB', 'PostgreSQL', 'Redis'] },
+    { category: 'DevOps', icon: GitBranch, items: ['Docker', 'AWS', 'Git', 'CI/CD'] },
+    { category: 'Fundamentals', icon: Cpu, items: ['C++', 'Data Structures', 'Algorithms'] }
   ];
 
   return (
     <section id="experience" className="section">
       <div className="container">
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-8 sm:mb-12 lg:mb-16">
           <h2 className="section-title">
             Experience <span className="gradient-text">& Education</span>
           </h2>
           <p className="section-subtitle">
-            Professional journey and academic background in technology
+            Professional journey and academic background
           </p>
         </div>
 
-        {/* Timeline */}
-        <div className="relative max-w-4xl mx-auto">
-          {/* Timeline Line */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gradient-to-b from-primary-500 to-secondary-500 hidden lg:block"></div>
-
+        {/* Timeline - Responsive */}
+        <div className="relative max-w-3xl mx-auto px-2 sm:px-4">
           {/* Timeline Items */}
-          {experiences.map((exp, index) => (
-            <div
-              key={exp.id}
-              className={`relative mb-12 lg:w-1/2 ${index % 2 === 0 ? 'lg:ml-0 lg:mr-auto lg:pr-12' : 'lg:ml-auto lg:pl-12'} animate-slide-up`}
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              {/* Timeline Dot */}
-              <div className={`absolute top-6 ${
-                index % 2 === 0 ? 'lg:right-[-6px]' : 'lg:left-[-6px]'
-              } w-4 h-4 rounded-full border-4 border-white dark:border-dark-800 bg-primary-500 z-10 hidden lg:block`}></div>
-
-              {/* Content Card */}
-              <div className="bg-white dark:bg-dark-800 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 p-6">
+          <div className="space-y-6 sm:space-y-8">
+            {experiences.map((exp, index) => (
+              <div
+                key={exp.id}
+                className="relative bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-4 sm:p-5 lg:p-6"
+              >
                 {/* Header */}
-                <div className="flex items-start gap-4 mb-4">
-                  <div className={`p-3 rounded-xl ${exp.color.replace('text-', 'bg-')}/10`}>
-                    <exp.icon className={`w-6 h-6 ${exp.color}`} />
+                <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
+                  <div className={`p-2 sm:p-2.5 rounded-xl ${exp.color.replace('text-', 'bg-')}/10 w-fit`}>
+                    <exp.icon className={`w-4 h-4 sm:w-5 sm:h-5 ${exp.color}`} />
                   </div>
                   <div className="flex-1">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2">
-                      <h3 className="text-xl font-bold text-dark-900 dark:text-white">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-1 sm:mb-2">
+                      <h3 className="text-sm sm:text-base lg:text-lg font-bold text-gray-900 dark:text-white">
                         {exp.title}
                       </h3>
-                      <span className="text-sm font-medium text-primary-600 dark:text-primary-400 bg-primary-100 dark:bg-primary-900/30 px-3 py-1 rounded-full">
+                      <span className="text-[10px] sm:text-xs font-medium text-primary-600 dark:text-primary-400 bg-primary-100 dark:bg-primary-900/30 px-2 py-0.5 rounded-full w-fit">
                         {exp.type === 'work' ? 'Work' : 'Education'}
                       </span>
                     </div>
-                    <div className="flex flex-wrap items-center gap-4 text-dark-600 dark:text-dark-400 text-sm">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-gray-600 dark:text-gray-400 text-[10px] sm:text-xs">
                       <div className="flex items-center gap-1">
                         {exp.type === 'work' ? (
-                          <Briefcase className="w-4 h-4" />
+                          <Briefcase className="w-3 h-3" />
                         ) : (
-                          <GraduationCap className="w-4 h-4" />
+                          <GraduationCap className="w-3 h-3" />
                         )}
                         <span>{exp.company || exp.institution}</span>
                       </div>
                       <div className="flex items-center gap-1">
-                        <MapPin className="w-4 h-4" />
+                        <MapPin className="w-3 h-3" />
                         <span>{exp.location}</span>
                       </div>
                       <div className="flex items-center gap-1">
-                        <Calendar className="w-4 h-4" />
+                        <Calendar className="w-3 h-3" />
                         <span>{exp.period}</span>
                       </div>
                     </div>
@@ -158,20 +144,20 @@ const Experience = () => {
                 </div>
 
                 {/* Description */}
-                <p className="text-dark-600 dark:text-dark-400 mb-6">
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3 sm:mb-4">
                   {exp.description}
                 </p>
 
                 {/* Achievements */}
-                <div className="mb-6">
-                  <h4 className="text-lg font-semibold text-dark-900 dark:text-white mb-3">
+                <div className="mb-3 sm:mb-4">
+                  <h4 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white mb-2">
                     Key Achievements
                   </h4>
-                  <ul className="space-y-2">
+                  <ul className="space-y-1">
                     {exp.achievements.map((achievement, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <Award className="w-4 h-4 text-primary-500 mt-1 flex-shrink-0" />
-                        <span className="text-dark-600 dark:text-dark-400">
+                      <li key={idx} className="flex items-start gap-1.5">
+                        <Award className="w-3 h-3 text-primary-500 mt-0.5 flex-shrink-0" />
+                        <span className="text-[10px] sm:text-xs text-gray-600 dark:text-gray-400">
                           {achievement}
                         </span>
                       </li>
@@ -181,14 +167,14 @@ const Experience = () => {
 
                 {/* Technologies */}
                 <div>
-                  <h4 className="text-lg font-semibold text-dark-900 dark:text-white mb-3">
-                    Technologies Used
+                  <h4 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                    Technologies
                   </h4>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-1 sm:gap-1.5">
                     {exp.technologies.map((tech) => (
                       <span
                         key={tech}
-                        className="px-3 py-1 bg-dark-100 dark:bg-dark-700 text-dark-700 dark:text-dark-300 rounded-lg text-sm font-medium"
+                        className="px-1.5 sm:px-2 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded text-[9px] sm:text-xs"
                       >
                         {tech}
                       </span>
@@ -196,55 +182,51 @@ const Experience = () => {
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* Skills Matrix */}
-        <div className="mt-20">
-          <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold text-dark-900 dark:text-white mb-4">
-              Technical Skills Matrix
+        <div className="mt-10 sm:mt-12 lg:mt-16">
+          <div className="text-center mb-6 sm:mb-8 lg:mb-10">
+            <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 dark:text-white mb-2">
+              Technical Skills
             </h3>
-            <p className="text-dark-600 dark:text-dark-400 max-w-2xl mx-auto">
-              Comprehensive skill set across multiple domains of software development
+            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+              Comprehensive skill set across multiple domains
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {skills.map((skillCategory, index) => (
               <div
                 key={skillCategory.category}
-                className="bg-white dark:bg-dark-800 rounded-2xl shadow-xl p-6 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 animate-slide-up"
-                style={{ animationDelay: `${index * 100}ms` }}
+                className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-5 hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
               >
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-3 rounded-xl bg-primary-100 dark:bg-primary-900/30">
-                    <skillCategory.icon className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+                <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                  <div className="p-1.5 sm:p-2 rounded-lg bg-primary-100 dark:bg-primary-900/30">
+                    <skillCategory.icon className="w-3 h-3 sm:w-4 sm:h-4 text-primary-600 dark:text-primary-400" />
                   </div>
-                  <h4 className="text-xl font-bold text-dark-900 dark:text-white">
+                  <h4 className="text-sm sm:text-base font-bold text-gray-900 dark:text-white">
                     {skillCategory.category}
                   </h4>
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-2">
                   {skillCategory.items.map((skill) => (
                     <div key={skill} className="group">
                       <div className="flex justify-between items-center mb-1">
-                        <span className="text-dark-700 dark:text-dark-300 font-medium group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                        <span className="text-[10px] sm:text-xs text-gray-700 dark:text-gray-300">
                           {skill}
                         </span>
-                        <span className="text-sm font-bold text-primary-600 dark:text-primary-400">
-                          {Math.floor(Math.random() * 30) + 70}%
+                        <span className="text-[8px] sm:text-[10px] font-bold text-primary-600 dark:text-primary-400">
+                          {Math.floor(Math.random() * 20) + 80}%
                         </span>
                       </div>
-                      <div className="h-2 bg-dark-100 dark:bg-dark-700 rounded-full overflow-hidden">
+                      <div className="h-1 sm:h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                         <div 
-                          className="h-full bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full transition-all duration-1000 ease-out"
-                          style={{ 
-                            width: `${Math.floor(Math.random() * 30) + 70}%`,
-                            '--target-width': `${Math.floor(Math.random() * 30) + 70}%`
-                          }}
+                          className="h-full bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full"
+                          style={{ width: `${Math.floor(Math.random() * 20) + 80}%` }}
                         ></div>
                       </div>
                     </div>
@@ -252,35 +234,6 @@ const Experience = () => {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* Stats */}
-        <div className="mt-20">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="bg-gradient-to-br from-primary-500 to-secondary-500 rounded-2xl p-6 text-white text-center">
-              <div className="text-3xl font-bold mb-2">15+</div>
-              <div className="text-sm opacity-90">Projects Completed</div>
-              <TrendingUp className="w-8 h-8 mx-auto mt-4 opacity-80" />
-            </div>
-            
-            <div className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl p-6 text-white text-center">
-              <div className="text-3xl font-bold mb-2">3+</div>
-              <div className="text-sm opacity-90">Years Experience</div>
-              <Calendar className="w-8 h-8 mx-auto mt-4 opacity-80" />
-            </div>
-            
-            <div className="bg-gradient-to-br from-green-500 to-teal-500 rounded-2xl p-6 text-white text-center">
-              <div className="text-3xl font-bold mb-2">10+</div>
-              <div className="text-sm opacity-90">Technologies</div>
-              <Code className="w-8 h-8 mx-auto mt-4 opacity-80" />
-            </div>
-            
-            <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl p-6 text-white text-center">
-              <div className="text-3xl font-bold mb-2">5+</div>
-              <div className="text-sm opacity-90">Certifications</div>
-              <Award className="w-8 h-8 mx-auto mt-4 opacity-80" />
-            </div>
           </div>
         </div>
       </div>
