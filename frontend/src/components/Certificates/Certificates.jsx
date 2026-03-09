@@ -14,13 +14,18 @@ const Certificates = () => {
   const [certificates, setCertificates] = useState([]);
   const [loading, setLoading] = useState(true);
 
+ 
+  // ✅ ADD THIS LINE - Environment variable for API URL
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
   useEffect(() => {
     fetchCertificates();
   }, []);
 
   const fetchCertificates = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/certificates');
+      // ✅ FIXED - Use environment variable (NO /admin in path!)
+      const response = await axios.get(`${API_URL}/api/certificates`);
       setCertificates(response.data.data);
     } catch (error) {
       console.error('Error fetching certificates:', error);

@@ -20,10 +20,13 @@ const Certificates = () => {
     featured: false
   });
 
-  const api = axios.create({
-    baseURL: 'http://localhost:5000/api/admin',
-    headers: { 'Authorization': `Bearer ${localStorage.getItem('adminToken')}` }
-  });
+  // Add this line after your useState declarations (around line 22)
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
+const api = axios.create({
+  baseURL: `${API_URL}/api/admin`,  // ✅ Now uses environment variable!
+  headers: { 'Authorization': `Bearer ${localStorage.getItem('adminToken')}` }
+});
 
   useEffect(() => {
     fetchCertificates();

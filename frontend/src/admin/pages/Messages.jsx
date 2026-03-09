@@ -9,8 +9,12 @@ const Messages = () => {
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
+// ✅ ADD THIS LINE - Environment variable for API URL
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
+  // ✅ FIXED - Now uses environment variable
   const api = axios.create({
-    baseURL: 'http://localhost:5000/api/admin',
+    baseURL: `${API_URL}/api/admin`,  // ✅ Now dynamic!
     headers: { 'Authorization': `Bearer ${localStorage.getItem('adminToken')}` }
   });
 

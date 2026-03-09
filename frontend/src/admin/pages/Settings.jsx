@@ -25,10 +25,14 @@ const Settings = ({ user }) => {
     emailAlerts: true
   });
 
-  const api = axios.create({
-    baseURL: 'http://localhost:5000/api/admin',
-    headers: { 'Authorization': `Bearer ${localStorage.getItem('adminToken')}` }
-  });
+ // Add this line at the top of your component (after useState hooks)
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
+// Then use it in your API calls
+const api = axios.create({
+  baseURL: `${API_URL}/api/admin`,  // ✅ Notice the /admin part
+  headers: { 'Authorization': `Bearer ${localStorage.getItem('adminToken')}` }
+});
 
   const handleProfileUpdate = async (e) => {
     e.preventDefault();

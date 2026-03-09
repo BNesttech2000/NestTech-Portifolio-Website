@@ -12,13 +12,17 @@ const Login = ({ onLogin }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // ✅ ADD THIS LINE - IT DEFINES WHAT API_URL MEANS
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     
     try {
-      const response = await axios.post('http://localhost:5000/api/admin/auth/login', credentials);
-      
+      // ✅ NOW THIS WORKS - API_URL is defined above
+      const response = await axios.post(`${API_URL}/api/admin/auth/login`, credentials);
+
       if (response.data.success) {
         toast.success('Login successful!');
         onLogin(response.data.user, response.data.token);

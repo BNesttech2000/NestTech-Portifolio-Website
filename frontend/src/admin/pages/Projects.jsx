@@ -29,10 +29,14 @@ const Projects = () => {
     status: 'completed'
   });
 
+   // ✅ ADD THIS LINE - Environment variable for API URL
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
+  // ✅ FIXED - Now uses environment variable
   const getApi = () => {
     const token = localStorage.getItem('adminToken');
     return axios.create({
-      baseURL: 'http://localhost:5000/api/admin',
+      baseURL: `${API_URL}/api/admin`,  // ✅ Now dynamic!
       headers: { 'Authorization': `Bearer ${token}` }
     });
   };

@@ -17,11 +17,14 @@ const Dashboard = ({ user }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Create axios instance with token
+  // âœ… ADD THIS LINE - Environment variable for API URL
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
+  // âœ… FIXED - Now uses environment variable
   const getApi = () => {
     const token = localStorage.getItem('adminToken');
     return axios.create({
-      baseURL: 'http://localhost:5000/api/admin',
+      baseURL: `${API_URL}/api/admin`,  // âœ… Now dynamic!
       headers: { 
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -151,7 +154,7 @@ const Dashboard = ({ user }) => {
     <div className="space-y-6">
       {/* Welcome Banner */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-6 text-white shadow-lg">
-        <h1 className="text-2xl font-bold">Welcome back, {user?.username}! í±‹</h1>
+        <h1 className="text-2xl font-bold">Welcome back, {user?.username}! ï¿½ï¿½ï¿½</h1>
         <p className="text-blue-100 mt-2">
           Here's what's happening with your portfolio today.
         </p>
